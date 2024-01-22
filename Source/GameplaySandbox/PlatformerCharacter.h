@@ -15,22 +15,42 @@ UCLASS()
 class GAMEPLAYSANDBOX_API APlatformerCharacter : public ACharacter
 {
 	GENERATED_BODY()
-		UPROPERTY(EditAnywhere) TObjectPtr<USpringArmComponent> springArmComponent = nullptr;
-		UPROPERTY(EditAnywhere) TObjectPtr<UCameraComponent> cameraComponent = nullptr;
 
-		UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> inputMove = nullptr;
-		UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> inputRotation = nullptr;
-		UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> inputJump = nullptr;
-		UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> inputCrouch = nullptr;
-		UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> inputSprint = nullptr;
-		UPROPERTY(EditAnywhere) TObjectPtr<UInputMappingContext> imc = nullptr;
 
 public:
 	APlatformerCharacter();
 
 protected:
+
+	UPROPERTY(EditAnywhere) TObjectPtr<USpringArmComponent> SpringArmComponent = nullptr;
+	UPROPERTY(EditAnywhere) TObjectPtr<UCameraComponent> CameraComponent = nullptr;
+
+	UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> InputActionMove = nullptr;
+	UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> InputActionLook = nullptr;
+	UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> InputActionSprint = nullptr;
+	UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> InputActionJump = nullptr;
+	UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> InputActionCrouch = nullptr;
+	UPROPERTY(EditAnywhere) TObjectPtr<UInputMappingContext> InputMappingContext = nullptr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformerCharacter|AnimationInputs")
+	float LeftStickXValue = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformerCharacter|AnimationInputs")
+	float LeftStickYValue = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformerCharacter|AnimationInputs")
+	bool isSprinting = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformerCharacter|AnimationInputs")
+	bool isJumping = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformerCharacter|AnimationInputs")
+	bool isCrouching = false;
+
 	virtual void BeginPlay() override;
-	void InitInputs();
+	
+	void InitIMC();
+	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
+	void Jump(const FInputActionValue& Value);
+	void Sprint(const FInputActionValue& Value);
+	void Crouch(const FInputActionValue& Value);
 
 public:	
 	virtual void Tick(float DeltaTime) override;
