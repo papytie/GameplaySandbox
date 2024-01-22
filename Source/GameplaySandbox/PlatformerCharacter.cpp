@@ -30,7 +30,8 @@ void APlatformerCharacter::InitIMC()
 	if (ULocalPlayer* LocalPlayer = GetWorld()->GetFirstPlayerController()->GetLocalPlayer())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("LocalPlayer initialised"));
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = 
+			LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Subsystem initialised"));
 			Subsystem->AddMappingContext(InputMappingContext, 0);
@@ -45,7 +46,8 @@ void APlatformerCharacter::InitIMC()
 
 void APlatformerCharacter::Move(const FInputActionValue& Value)
 {
-	GetWorld()->GetFirstPlayerController()->SetControlRotation(GetActorRotation()); //Align PlayerController Rotation to ActorRotation
+	//Align PlayerController Rotation to ActorRotation
+	GetWorld()->GetFirstPlayerController()->SetControlRotation(GetActorRotation()); 
 	
 	const FVector2D CurrentValue = Value.Get<FVector2D>();
 	float XAxis = CurrentValue.X;
@@ -54,7 +56,8 @@ void APlatformerCharacter::Move(const FInputActionValue& Value)
 	UE_LOG(LogTemp, Warning, TEXT("YAxis value : %f"), YAxis);
 	LeftStickXValue = XAxis; //Set variable for animation
 	
-	bUseControllerRotationYaw = XAxis > 0.2f || XAxis < -0.2f ? true : false; //Change controller acces to edit RootMotion Rotation when go forward
+	//Change controller acces to edit RootMotion Rotation when go forward
+	bUseControllerRotationYaw = XAxis > 0.5f ? true : false; 
 	if (bUseControllerRotationYaw)
 		AddControllerYawInput(YAxis); //Add Custom Rotation or (below)
 	else LeftStickYValue = YAxis; //Set variable for animation
@@ -82,12 +85,12 @@ void APlatformerCharacter::Sprint(const FInputActionValue& Value)
 	isSprinting = Value.Get<bool>() ? true : false;
 }
 
-void APlatformerCharacter::Crouch(const FInputActionValue& Value)
+void APlatformerCharacter::Dash(const FInputActionValue& Value)
 {
 	const bool CurrentValue = Value.Get<bool>();
 	if (CurrentValue)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Crouch Input"));
+		UE_LOG(LogTemp, Warning, TEXT("Dash Input"));
 	}
 }
 
@@ -101,16 +104,25 @@ void APlatformerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	if (UEnhancedInputComponent* EnhancedInputComponent = 
+		CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		EnhancedInputComponent->BindAction(InputActionMove, ETriggerEvent::Triggered, this, &APlatformerCharacter::Move);
-		EnhancedInputComponent->BindAction(InputActionMove, ETriggerEvent::Completed, this, &APlatformerCharacter::Move);
-		EnhancedInputComponent->BindAction(InputActionLook, ETriggerEvent::Triggered, this, &APlatformerCharacter::Look);
-		EnhancedInputComponent->BindAction(InputActionLook, ETriggerEvent::Completed, this, &APlatformerCharacter::Look);
-		EnhancedInputComponent->BindAction(InputActionJump, ETriggerEvent::Started, this, &APlatformerCharacter::Jump);
-		EnhancedInputComponent->BindAction(InputActionSprint, ETriggerEvent::Started, this, &APlatformerCharacter::Sprint);
-		EnhancedInputComponent->BindAction(InputActionSprint, ETriggerEvent::Completed, this, &APlatformerCharacter::Sprint);
-		EnhancedInputComponent->BindAction(InputActionCrouch, ETriggerEvent::Started, this, &APlatformerCharacter::Crouch);
+		EnhancedInputComponent->BindAction(InputActionMove, 
+			ETriggerEvent::Triggered, this, &APlatformerCharacter::Move);
+		EnhancedInputComponent->BindAction(InputActionMove, 
+			ETriggerEvent::Completed, this, &APlatformerCharacter::Move);
+		EnhancedInputComponent->BindAction(InputActionLook, 
+			ETriggerEvent::Triggered, this, &APlatformerCharacter::Look);
+		EnhancedInputComponent->BindAction(InputActionLook, 
+			ETriggerEvent::Completed, this, &APlatformerCharacter::Look);
+		EnhancedInputComponent->BindAction(InputActionJump, 
+			ETriggerEvent::Started, this, &APlatformerCharacter::Jump);
+		EnhancedInputComponent->BindAction(InputActionSprint, 
+			ETriggerEvent::Started, this, &APlatformerCharacter::Sprint);
+		EnhancedInputComponent->BindAction(InputActionSprint, 
+			ETriggerEvent::Completed, this, &APlatformerCharacter::Sprint);
+		EnhancedInputComponent->BindAction(InputActionDash,
+			ETriggerEvent::Started, this, &APlatformerCharacter::Dash);
 	}
 
 }

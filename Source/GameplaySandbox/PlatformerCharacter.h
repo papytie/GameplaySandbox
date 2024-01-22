@@ -29,7 +29,7 @@ protected:
 	UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> InputActionLook = nullptr;
 	UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> InputActionSprint = nullptr;
 	UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> InputActionJump = nullptr;
-	UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> InputActionCrouch = nullptr;
+	UPROPERTY(EditAnywhere) TObjectPtr<UInputAction> InputActionDash = nullptr;
 	UPROPERTY(EditAnywhere) TObjectPtr<UInputMappingContext> InputMappingContext = nullptr;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformerCharacter|AnimationInputs")
@@ -41,7 +41,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformerCharacter|AnimationInputs")
 	bool isJumping = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformerCharacter|AnimationInputs")
-	bool isCrouching = false;
+	bool isDashing = false;
 
 	virtual void BeginPlay() override;
 	
@@ -50,7 +50,7 @@ protected:
 	void Look(const FInputActionValue& Value);
 	void Jump(const FInputActionValue& Value);
 	void Sprint(const FInputActionValue& Value);
-	void Crouch(const FInputActionValue& Value);
+	void Dash(const FInputActionValue& Value);
 
 public:	
 	virtual void Tick(float DeltaTime) override;
