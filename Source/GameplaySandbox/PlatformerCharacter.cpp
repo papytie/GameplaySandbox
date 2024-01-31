@@ -47,27 +47,32 @@ void APlatformerCharacter::InitIMC()
 void APlatformerCharacter::Move(const FInputActionValue& Value)
 {
 	//Align PlayerController Rotation to ActorRotation
-	GetWorld()->GetFirstPlayerController()->SetControlRotation(GetActorRotation()); 
+	//GetWorld()->GetFirstPlayerController()->SetControlRotation(GetActorRotation()); 
 	
 	const FVector2D CurrentValue = Value.Get<FVector2D>();
 	float XAxis = CurrentValue.X;
 	float YAxis = CurrentValue.Y;
-	UE_LOG(LogTemp, Warning, TEXT("XAxis value : %f"), XAxis);
-	UE_LOG(LogTemp, Warning, TEXT("YAxis value : %f"), YAxis);
-	LeftStickXValue = XAxis; //Set variable for animation
+	//UE_LOG(LogTemp, Warning, TEXT("XAxis value : %f"), XAxis);
+	//UE_LOG(LogTemp, Warning, TEXT("YAxis value : %f"), YAxis);
+	//LeftStickXValue = XAxis; //Set variable for animation
+
+	AddMovementInput(GetActorForwardVector(), XAxis);
+	//AddControllerYawInput(XAxis);
+	AddMovementInput(GetActorRightVector(), YAxis);
+	AddControllerYawInput(YAxis);
 	
-	//Change controller acces to edit RootMotion Rotation when go forward
-	bUseControllerRotationYaw = XAxis > 0.5f ? true : false; 
-	if (bUseControllerRotationYaw)
-		AddControllerYawInput(YAxis); //Add Custom Rotation or (below)
-	else LeftStickYValue = YAxis; //Set variable for animation
+	////Change controller acces to edit RootMotion Rotation when go forward
+	//bUseControllerRotationYaw = XAxis > 0.5f ? true : false; 
+	//if (bUseControllerRotationYaw)
+	//	AddControllerYawInput(YAxis); //Add Custom Rotation or (below)
+	//else LeftStickYValue = YAxis; //Set variable for animation
 }
 
 void APlatformerCharacter::Look(const FInputActionValue& Value)
 {
-	const FVector2D CurrentValue = Value.Get<FVector2D>();
+	/*const FVector2D CurrentValue = Value.Get<FVector2D>();
 	float XAxis = CurrentValue.X;
-	float YAxis = CurrentValue.Y;
+	float YAxis = CurrentValue.Y;*/
 
 }
 
